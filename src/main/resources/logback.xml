@@ -12,7 +12,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="Route" level="INFO" additivity="false">
+	<logger name="route1" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 

@@ -6,6 +6,7 @@
 
 # Package Files #
 *.jar
+*.tar
 *.war
 *.ear
 
@@ -47,6 +48,7 @@
 /web-app/WEB-INF/classes
 
 # "temporary" build files
+/bin
 /build
 /target
 
