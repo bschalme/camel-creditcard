@@ -19,7 +19,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BmoCsvProcessor implements Processor {
 
 	@Override

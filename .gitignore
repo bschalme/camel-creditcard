@@ -18,6 +18,7 @@
 /.launch
 /.project
 /.settings
+/.springBeans
 /*.launch
 /*.tmproj
 /ivy*
