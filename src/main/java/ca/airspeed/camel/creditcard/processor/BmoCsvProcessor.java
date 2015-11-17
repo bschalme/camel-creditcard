@@ -11,14 +11,14 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-
-import ca.airspeed.camel.creditcard.domain.CreditCardItem;
 
 public class BmoCsvProcessor implements Processor {
 
@@ -40,13 +40,13 @@ public class BmoCsvProcessor implements Processor {
 			bld.append(line);
 		}
 		Iterable<CSVRecord> records = CSVFormat.EXCEL.withHeader().parse(new StringReader(bld.toString()));
-		List<CreditCardItem> items = new ArrayList<>();
+		List<Map<String, ?>> items = new ArrayList<>();
 		DateFormat df = new SimpleDateFormat("yyyyMMdd");
 		for (CSVRecord record : records) {
-			CreditCardItem item = new CreditCardItem();
-			item.setTxnDate(df.parse(record.get("Transaction Date")));
-			item.setTxnAmount(new BigDecimal(record.get("Transaction Amount")));
-			item.setDescription(record.get("Description"));
+			Map<String, Object> item = new HashMap<>();
+			item.put("txnDate", df.parse(record.get("Transaction Date")));
+			item.put("txnAmount", new BigDecimal(record.get("Transaction Amount")));
+			item.put("description", record.get("Description"));
 			items.add(item);
 		}
 		exchange.getIn().setBody(items);

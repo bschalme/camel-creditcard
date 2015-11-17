@@ -1,11 +1,14 @@
 package ca.airspeed.camel.creditcard.processor;
 
+import static org.apache.commons.collections4.MapUtils.getString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -17,8 +20,6 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
-
-import ca.airspeed.camel.creditcard.domain.CreditCardItem;
 
 public class BmoCsvProcessorUnitTest extends CamelTestSupport {
 
@@ -39,12 +40,12 @@ public class BmoCsvProcessorUnitTest extends CamelTestSupport {
 		Exchange exchange = exchanges.get(0);
 		Message message = exchange.getIn();
 		@SuppressWarnings("unchecked")
-		List<CreditCardItem> items = message.getBody(List.class);
+		List<Map<String, ?>> items = message.getBody(List.class);
 		assertThat("Number of credit card items;", items, hasSize(equalTo(2)));
-		CreditCardItem item = items.get(0);
-		assertThat("TransactionDate;", item.getTxnDate(), equalTo(new LocalDateTime(2015, 8, 5, 0, 0).toDate()));
-		assertThat("Transaction Amount;", item.getTxnAmount(), equalTo(new BigDecimal("6.78")));
-		assertThat("Description;", item.getDescription(), equalTo("SUPERLAB 905-5879135 ON"));
+		Map<String, ?> item = items.get(0);
+		assertThat("TransactionDate;", (Date) item.get("txnDate"), equalTo(new LocalDateTime(2015, 8, 5, 0, 0).toDate()));
+		assertThat("Transaction Amount;", (BigDecimal) item.get("txnAmount"), equalTo(new BigDecimal("6.78")));
+		assertThat("Description;", getString(item,"description"), equalTo("SUPERLAB 905-5879135 ON"));
 	}
 
 	@Override
