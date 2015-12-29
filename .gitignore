@@ -4,12 +4,6 @@
 # Environment setup files
 /setenv
 
-# Package Files #
-*.jar
-*.tar
-*.war
-*.ear
-
 # web application files
 /web-app/WEB-INF
 
