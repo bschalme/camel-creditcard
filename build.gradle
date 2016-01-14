@@ -11,8 +11,6 @@ buildscript {
     }
 }
 
-group = 'bschalme'
-
 apply plugin: 'docker'
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -55,6 +53,7 @@ processResources {
 task buildDocker(type: Docker, dependsOn: build) {
   push = false
   applicationName = jar.baseName
+  tagVersion = 'latest'
   dockerfile = file('Dockerfile')
   doFirst {
     copy {
@@ -68,6 +67,7 @@ task distDocker(type: Docker, dependsOn: build) {
   push = true
   registry = 'registry.internal.airspeed.ca/airspeed'
   applicationName = jar.baseName
+  tagVersion = 'latest'
   dockerfile = file('Dockerfile')
   doFirst {
     copy {
