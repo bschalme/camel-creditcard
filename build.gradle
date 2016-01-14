@@ -53,10 +53,22 @@ processResources {
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
+  push = false
+  applicationName = jar.baseName
+  dockerfile = file('Dockerfile')
+  doFirst {
+    copy {
+      from jar
+      into stageDir
+    }
+  }
+}
+
+task distDocker(type: Docker, dependsOn: build) {
   push = true
   registry = 'registry.internal.airspeed.ca/airspeed'
   applicationName = jar.baseName
-  dockerfile = file('src/main/docker/Dockerfile')
+  dockerfile = file('Dockerfile')
   doFirst {
     copy {
       from jar
