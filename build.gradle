@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE")
         classpath('se.transmode.gradle:gradle-docker:1.2')
+        classpath('pl.allegro.tech.build:axion-release-plugin:1.3.4')
     }
 }
 
@@ -15,6 +16,7 @@ apply plugin: 'docker'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
+apply plugin: 'pl.allegro.tech.build.axion-release'
 
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -50,6 +52,14 @@ processResources {
     expand(project.properties)
 }
 
+scmVersion {
+    tag {
+        prefix = project.name
+    }
+}
+
+project.version = scmVersion.version
+
 task buildDocker(type: Docker, dependsOn: build) {
   push = false
   applicationName = jar.baseName
@@ -63,11 +73,13 @@ task buildDocker(type: Docker, dependsOn: build) {
   }
 }
 
+String dockerTagVersion = project.version?.endsWith('SNAPSHOT') ? 'latest' : project.version
+
 task distDocker(type: Docker, dependsOn: build) {
   push = true
   registry = 'registry.internal.airspeed.ca/airspeed'
   applicationName = jar.baseName
-  tagVersion = 'latest'
+  tagVersion = dockerTagVersion
   dockerfile = file('Dockerfile')
   doFirst {
     copy {
